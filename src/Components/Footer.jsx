@@ -8,7 +8,7 @@ const Footer = () => {
         {/* Brand */}
         <div>
           <h2 className="text-2xl font-bold flex items-center gap-2 text-red-600">
-            <FaHeart /> BloodBridge
+            <FaHeart />DonorSync
           </h2>
           <p className="mt-2 text-sm">
             Saving lives, one drop at a time. Join us in making a difference.

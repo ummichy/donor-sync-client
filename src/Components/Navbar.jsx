@@ -53,7 +53,7 @@ const Navbar = () => {
         <div>
           <Link to="/" className="text-2xl font-bold flex items-center gap-1 text-red-600">
             <FaHeartbeat className="text-red-600" />
-            BloodBridge
+            DonorSync
           </Link>
         </div>
 
