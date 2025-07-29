@@ -28,5 +28,4 @@ Jodit React (for blog editor)
 SweetAlert2
 React Toastify
 Stripe 
-Other utility libraries as needed for responsiveness, form handling, and secure communication.
 
