@@ -19,11 +19,11 @@ const Register = () => {
 
   // Load districts and upazilas from public folder JSONs
   useEffect(() => {
-    fetch("/districts.json")
+    fetch("/district.json")
       .then((res) => res.json())
       .then((data) => setDistricts(data));
 
-    fetch("/upazilas.json")
+    fetch("/upazila.json")
       .then((res) => res.json())
       .then((data) => setUpazilas(data));
   }, []);
