@@ -68,7 +68,7 @@ const ContactSection = () => {
             </div>
             <div className="flex items-center space-x-3">
               <FaEnvelope className="text-red-500 text-xl" />
-              <span className="text-lg font-medium">support@bloodlink.org</span>
+              <span className="text-lg font-medium">support@donorsync.org</span>
             </div>
           </div>
 

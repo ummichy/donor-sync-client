@@ -1,8 +1,8 @@
 Project Name: DonorSync
-Live Site: 
+Live Site:  https://donorsyncruct12ph.netlify.app/ 
 
 Purpose:
-BloodLink is built to ensure that blood reaches those who need it most. The platform connects donors with patients in critical need, such as accident victims, surgery patients, and individuals with chronic illnesses. It helps prevent emergency shortages by promoting responsible and timely donations. BloodLink empowers users by allowing them to donate blood, manage requests, volunteer, or spread awareness. It encourages people to take real action within their local communities to support life-saving efforts.
+DonorSync is built to ensure that blood reaches those who need it most. The platform connects donors with patients in critical need, such as accident victims, surgery patients, and individuals with chronic illnesses. It helps prevent emergency shortages by promoting responsible and timely donations. DonorSync empowers users by allowing them to donate blood, manage requests, volunteer, or spread awareness. It encourages people to take real action within their local communities to support life-saving efforts.
 
 Key Features:
 The platform includes a blood donation request system where logged-in users can submit requests with details like recipient name, location, blood group, date, and time. The role-based user dashboard provides separate features for each user type. Donors can manage their own requests, including viewing, editing, marking as done, or canceling them. Volunteers can update the donation status of all requests. Admins have full access to manage all users, donation requests, and blog content.

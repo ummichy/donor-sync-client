@@ -6,7 +6,7 @@ const FeaturedSection = () => {
   return (
     <section className="py-12 bg-red-50">
       <div className="max-w-6xl mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center mb-8 text-red-600">Why Choose BloodLink?</h2>
+        <h2 className="text-3xl font-bold text-center mb-8 text-red-600">Why Choose DonorSync?</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           
           <div className="bg-white shadow-lg rounded-lg p-6 text-center hover:shadow-red-300 transition">
