@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../Provider/AuthProvider";
-import { Link } from "react-router";  // react-router-dom, not "react-router"
+import { Link } from "react-router";  
 import axios from "axios";
 
 const DashboardHome = () => {
