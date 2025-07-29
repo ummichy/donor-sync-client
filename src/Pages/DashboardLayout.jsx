@@ -10,7 +10,7 @@ const DashboardLayout = () => {
   return (
     <div className="flex min-h-screen bg-gray-100 ">
       {/* Sidebar */}
-      <aside className="w-64 bg-white shadow-lg pt-20">
+      <aside className="w-64 bg-white shadow-lg hidden md:block pt-20">
         <div className="p-4 text-center border-b">
           <h2 className="text-xl font-bold text-red-600">Dashboard</h2>
           <p className="text-sm text-gray-500">{user?.email}</p>
