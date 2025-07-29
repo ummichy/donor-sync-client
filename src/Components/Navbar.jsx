@@ -4,7 +4,7 @@ import { AuthContext } from "../Provider/AuthProvider";
 import { FaHeartbeat } from "react-icons/fa";
 import { MdDashboard } from "react-icons/md";
 import { toast } from "react-toastify";
-import Dashboard from "../Pages/Dashboard";
+import DashboardLayout from "../Pages/DashboardLayout";
 
 const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
@@ -75,7 +75,7 @@ const Navbar = () => {
                 <li className="text-center text-sm font-semibold">{user.displayName}</li>
                 <li>
                   <NavLink to="/dashboard" className="flex items-center gap-2">
-                    <Dashboard /> Dashboard
+                    <DashboardLayout /> Dashboard
                   </NavLink>
                 </li>
                 <li>
