@@ -9,6 +9,7 @@ import Register from "../Pages/Register";
 import PrivateRoute from "./PrivateRoute";
 import FundingLinks from "../Pages/FundingLinks";
 import Blog from "../Pages/Blog";
+import Dashboard from "../Pages/Dashboard";
 
 const router = createBrowserRouter([
   
@@ -42,6 +43,12 @@ const router = createBrowserRouter([
         path: "funding-links",
         element: <PrivateRoute>
    <FundingLinks></FundingLinks>
+        </PrivateRoute>,
+      },
+      {
+        path: "dashboard",
+        element: <PrivateRoute>
+ <Dashboard></Dashboard>
         </PrivateRoute>,
       },
       

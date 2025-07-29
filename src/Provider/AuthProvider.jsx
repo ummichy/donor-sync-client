@@ -1,50 +1,25 @@
-import React, { createContext, useEffect, useState } from 'react';
 import {
   createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  updateProfile,
+  deleteUser,
+  getAuth,
   GoogleAuthProvider,
-  signInWithPopup,
   onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signInWithPopup,
   signOut,
-} from 'firebase/auth';
-import { auth } from '../firebase/firebase.init';
-import useAxiosPublic from '../utils/axiosPublic';
+  updateProfile,
+} from "firebase/auth";
+import { createContext, useEffect, useState } from "react";
+import { app } from "../firebase/firebase.init";
+import useAxiosPublic from "../hooks/axiosPublic";
 
-export const AuthContext = createContext(null);
+export const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
+  const auth = getAuth(app);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-    const axiosPublic = useAxiosPublic();
-
-  
-  useEffect(() => {
-  const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-    if (currentUser) {
-      axiosPublic
-        .post("/add-user", {
-          email: currentUser.email,
-          roll: "user",
-           loginCount: 1,
-        })
-        .then((res) => {
-          setUser(currentUser);
-          console.log(res.data);
-        })
-        .catch((err) => {
-          console.error("Add-user error:", err);
-          setUser(currentUser); // ✅ still set the user
-        });
-    } else {
-      setUser(null); // ✅ Fix: set user to null on logout
-    }
-    setLoading(false);
-  });
-
-  return () => unsubscribe();
-}, []);
-
+  const axiosPublic = useAxiosPublic();
 
   const createUser = (email, password) => {
     return createUserWithEmailAndPassword(auth, email, password);
@@ -54,29 +29,62 @@ const AuthProvider = ({ children }) => {
     return signInWithEmailAndPassword(auth, email, password);
   };
 
-  const updateUser = (profile) => {
-    return updateProfile(auth.currentUser, profile);
-  };
-  const signInWithGoogle = () => {
-    const provider = new GoogleAuthProvider();
-    return signInWithPopup(auth, provider);
+  const googleProvider = new GoogleAuthProvider();
+
+  const googleSignIn = () => {
+    return signInWithPopup(auth, googleProvider);
   };
 
- 
+  const updateUser = (userInfo) => {
+    return updateProfile(auth.currentUser, userInfo);
+  };
+
+  const removeUser = (user) => {
+    return deleteUser(user);
+  };
+
   const logOut = () => {
-    setLoading(true);
     return signOut(auth);
   };
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      console.log("🚀 ~ Auth Changed:", currentUser);
+
+      if (currentUser) {
+        axiosPublic
+          .post("/add-user", {
+            email: currentUser.email,
+            loginCount: 1, // ✅ Removed "role" key
+          })
+          .then((res) => {
+            setUser(currentUser);
+            setLoading(false);
+          })
+          .catch((err) => {
+            console.error("add-user error:", err);
+            setUser(currentUser); // still set user
+            setLoading(false);
+          });
+      } else {
+        setUser(null);
+        setLoading(false);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const authInfo = {
     user,
     loading,
     createUser,
     signIn,
-    updateUser,
-    signInWithGoogle,
-    logOut,
     setUser,
+    logOut,
+    googleSignIn,
+    updateUser,
+    removeUser,
   };
 
   return (

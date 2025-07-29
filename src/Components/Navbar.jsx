@@ -4,6 +4,7 @@ import { AuthContext } from "../Provider/AuthProvider";
 import { FaHeartbeat } from "react-icons/fa";
 import { MdDashboard } from "react-icons/md";
 import { toast } from "react-toastify";
+import Dashboard from "../Pages/Dashboard";
 
 const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
@@ -73,9 +74,9 @@ const Navbar = () => {
               <ul tabIndex={0} className="mt-3 z-[2] p-2 shadow menu menu-sm dropdown-content bg-white rounded-box w-52">
                 <li className="text-center text-sm font-semibold">{user.displayName}</li>
                 <li>
-                  <Link to="/dashboard" className="flex items-center gap-2">
-                    <MdDashboard /> Dashboard
-                  </Link>
+                  <NavLink to="/dashboard" className="flex items-center gap-2">
+                    <Dashboard /> Dashboard
+                  </NavLink>
                 </li>
                 <li>
                   <button onClick={handleLogout}>Logout</button>
