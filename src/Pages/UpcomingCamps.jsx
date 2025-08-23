@@ -31,7 +31,8 @@ const UpcomingCamps = () => {
   ];
 
   return (
-    <section className="py-20 bg-[#f7f0e8] relative">
+    <section className="py-20 bg-gradient-to-b from-gray-100
+     to-white relative">
       <div className="max-w-5xl mx-auto px-6">
         {/* Heading */}
         <h2 className="text-3xl md:text-4xl font-bold text-center text-[#5C0000] mb-4">

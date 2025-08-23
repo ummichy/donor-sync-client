@@ -98,7 +98,8 @@ const itemVariants = {
 
 const Featured = () => {
   return (
-    <section className="py-20 px-6 md:px-16 max-w-7xl mx-auto">
+    <section className="py-20 px-6 md:px-16 max-w-full mx-auto  bg-gradient-to-b from-gray-100
+     to-white">
       <h2 className="text-center text-5xl font-extrabold text-[#5C0000] mb-16">
         Why Join Our Blood Donation Community?
       </h2>

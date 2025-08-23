@@ -10,18 +10,27 @@ const Banner = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
-      className="relative h-[80vh] sm:h-[70vh] md:h-[80vh] lg:h-screen bg-cover bg-center bg-no-repeat flex items-center overflow-hidden"
-
-      style={{
-        backgroundImage: "url('https://i.ibb.co/r2GfVYfv/bg.jpg')",
-      }}
+      className="relative h-[80vh] sm:h-[70vh] md:h-[80vh] lg:h-screen flex items-center overflow-hidden"
     >
+      {/* Background Video */}
+      <video
+        className="absolute top-0 left-0 w-full h-full object-cover z-0"
+        src="/blood.mp4" // put your video in public folder
+        autoPlay
+        muted
+        loop
+        playsInline
+      />
+
+      {/* Overlay */}
+      <div className="absolute top-0 left-0 w-full h-full bg-black/50 z-10"></div>
+
       {/* Content */}
       <motion.div
         initial={{ x: -50, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ delay: 0.4, duration: 0.7 }}
-        className="relative z-10 max-w-xl ml-4 md:ml-24 lg:ml-20 px-4 md:px-8 lg:px-12 text-center lg:text-left"
+        className="relative z-20 max-w-xl ml-4 md:ml-24 lg:ml-20 px-4 md:px-8 lg:px-12 text-center lg:text-left"
       >
         <h1
           className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4 md:mb-6"
@@ -31,10 +40,7 @@ const Banner = () => {
           <span className="text-center">Impact</span>
         </h1>
 
-        <p
-          className="text-base sm:text-lg text-white md:text-xl mb-6 md:mb-8"
-          // style={{ color: "#5C0000" }}
-        >
+        <p className="text-base sm:text-lg text-white md:text-xl mb-6 md:mb-8">
           Every drop counts. Become a blood donor and help save lives when it
           matters most. Join our mission to connect compassionate donors with
           patients in urgent need of hope and healing.
