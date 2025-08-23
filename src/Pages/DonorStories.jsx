@@ -1,68 +1,118 @@
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const DonorStories = () => {
   const stories = [
     {
       id: 1,
       name: "Amina Rahman",
-      story: "Donating blood changed my perspective on life. I felt I contributed to saving lives.",
-      image: "https://ui-avatars.com/api/?name=Amina+Rahman&background=FF0000&color=FFFFFF&rounded=true&size=128",
+      story:
+        "Donating blood changed my perspective on life. I felt I contributed to saving lives.",
+      image:
+        "https://ui-avatars.com/api/?name=Amina+Rahman&background=5C0000&color=FFFFFF&rounded=true&size=128",
     },
     {
       id: 2,
       name: "Imran Hossain",
-      story: "I joined a donation camp and realized how small actions can make a huge difference.",
-      image: "https://ui-avatars.com/api/?name=Imran+Hossain&background=FF0000&color=FFFFFF&rounded=true&size=128",
+      story:
+        "I joined a donation camp and realized how small actions can make a huge difference.",
+      image:
+        "https://ui-avatars.com/api/?name=Imran+Hossain&background=5C0000&color=FFFFFF&rounded=true&size=128",
     },
     {
       id: 3,
       name: "Fatema Akter",
-      story: "Being part of donor drives gave me a sense of community and purpose.",
-      image: "https://ui-avatars.com/api/?name=Fatema+Akter&background=FF0000&color=FFFFFF&rounded=true&size=128",
+      story:
+        "Being part of donor drives gave me a sense of community and purpose.",
+      image:
+        "https://ui-avatars.com/api/?name=Fatema+Akter&background=5C0000&color=FFFFFF&rounded=true&size=128",
     },
   ];
 
-  return (
-    <section className="py-24 relative bg-gradient-to-b from-red-50 via-white to-red-100 overflow-hidden">
-      {/* Decorative circles */}
-      <div className="absolute -top-16 -left-16 w-64 h-64 bg-red-200 rounded-full opacity-30 animate-pulse"></div>
-      <div className="absolute -bottom-20 -right-16 w-72 h-72 bg-red-300 rounded-full opacity-20 animate-pulse"></div>
+  const [current, setCurrent] = useState(0);
 
-      <div className="max-w-6xl mx-auto px-6 relative z-10">
-        <h2 className="text-3xl md:text-5xl font-extrabold text-center text-[#5C0000] mb-16">
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % stories.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, [stories.length]);
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 40, scale: 0.95 },
+    visible: { opacity: 1, y: 0, scale: 1 },
+    exit: { opacity: 0, y: -40, scale: 0.95 },
+  };
+
+  return (
+    <section className="py-24 relative overflow-hidden">
+      {/* Animated background gradient */}
+      <motion.div
+        className="absolute inset-0 bg-gradient-to-br from-red-100 via-white to-red-200"
+        animate={{ backgroundPosition: ["0% 0%", "100% 100%"] }}
+        transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+        style={{ backgroundSize: "200% 200%" }}
+      />
+
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
+        <h2 className="text-3xl md:text-5xl font-extrabold text-center text-[#5C0000] mb-16 drop-shadow-lg">
           Donor Stories
         </h2>
 
-        <div className="grid md:grid-cols-3 gap-12">
-          {stories.map((story, index) => (
-            <motion.div
-              key={story.id}
-              initial={{ opacity: 0, y: 50, rotate: -2 }}
-              whileInView={{ opacity: 1, y: 0, rotate: 0 }}
-              whileHover={{ scale: 1.05, rotate: 0 }}
-              transition={{ duration: 0.8, delay: index * 0.2, type: "spring", stiffness: 100 }}
-              className="bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-transform flex flex-col items-center text-center relative"
-            >
-              {/* Avatar Image */}
-              <div className="w-28 h-28 mb-4">
-                <img
-                  src={story.image}
-                  alt={story.name}
-                  className="w-full h-full rounded-full object-cover border-4 border-red-600 shadow-md"
+        <div className="flex flex-col md:flex-row items-center gap-12 md:gap-0 h-[550px]">
+          {/* Left side: Enlarged transparent card */}
+          <div className="w-full md:w-1/2 h-full flex items-center justify-center relative">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={stories[current].id}
+                className="w-[420px] rounded-3xl p-10 flex flex-col items-center text-center 
+                           shadow-2xl backdrop-blur-2xl border border-white/30 bg-transparent"
+                variants={cardVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                transition={{ duration: 0.7 }}
+              >
+                <motion.div
+                  className="w-32 h-32 mb-6 rounded-full border-4 border-[#5C0000] shadow-xl"
+                  style={{
+                    backgroundImage: `url(${stories[current].image})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                  }}
+                  animate={{ y: [0, -8, 0] }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    repeatType: "loop",
+                    ease: "easeInOut",
+                  }}
                 />
-              </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-3 drop-shadow-lg">
+                  {stories[current].name}
+                </h3>
+                <p className="text-gray-800 text-lg leading-relaxed drop-shadow-md">
+                  {stories[current].story}
+                </p>
+              </motion.div>
+            </AnimatePresence>
+          </div>
 
-              {/* Name */}
-              <h3 className="text-2xl font-bold text-gray-800 mb-3">{story.name}</h3>
-
-              {/* Story */}
-              <p className="text-gray-700 text-base">{story.story}</p>
-
-              {/* Decorative small dot behind card */}
-              <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 w-12 h-12 bg-red-100 rounded-full opacity-40 -z-10"></div>
-            </motion.div>
-          ))}
+          {/* Right side: Animated image with overlay */}
+          <div className="w-full md:w-1/2 h-full relative overflow-hidden rounded-3xl shadow-2xl">
+            <motion.img
+              src="https://i.ibb.co/qFdCSxCG/20200628-YM01-blood-donation-pack.jpg"
+              alt="Blood Donation"
+              className="absolute inset-0 w-full h-full object-cover"
+              animate={{ scale: [1, 1.1, 1], x: [0, -25, 0] }}
+              transition={{
+                duration: 12,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent"></div>
+          </div>
         </div>
       </div>
     </section>
