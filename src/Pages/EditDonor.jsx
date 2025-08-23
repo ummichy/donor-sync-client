@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router";
 import axios from "axios";
@@ -13,7 +12,7 @@ const EditDonor = () => {
   // Fetch existing data
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/donations/${id}`)
+      .get(`https://assignment-no-twelve-server.vercel.app/donations/${id}`)
       .then((res) => {
         setFormData(res.data);
         setLoading(false);
@@ -41,7 +40,7 @@ const EditDonor = () => {
     const { _id, ...updateData } = formData;
 
     axios
-      .put(`http://localhost:3000/donations/${id}`, updateData)
+      .put(`https://assignment-no-twelve-server.vercel.app/donations/${id}`, updateData)
       .then(() => {
         alert("Donation request updated successfully");
         navigate("/dashboard");
@@ -57,7 +56,7 @@ const EditDonor = () => {
 
   return (
     <div className="max-w-xl mx-auto bg-white p-6 mt-6 rounded shadow">
-      <h2 className="text-xl font-semibold mb-4 text-indigo-700">Edit Donation Request</h2>
+      <h2 className="text-xl font-semibold mb-4 text-red-700">Edit Donation Request</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
           type="text"
@@ -128,7 +127,7 @@ const EditDonor = () => {
         ></textarea>
         <button
           type="submit"
-          className="w-full bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"
+          className="w-full bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
         >
           Update Request
         </button>
@@ -138,3 +137,5 @@ const EditDonor = () => {
 };
 
 export default EditDonor;
+
+

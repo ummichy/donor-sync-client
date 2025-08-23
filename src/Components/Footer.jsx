@@ -1,14 +1,15 @@
-import { FaFacebookF, FaTwitter, FaInstagram, FaHeart } from "react-icons/fa";
+import { FaFacebookF, FaTwitter, FaInstagram } from "react-icons/fa";
 import { Link } from "react-router";
+import { GiBlood } from "react-icons/gi";
 
 const Footer = () => {
   return (
-    <footer className="bg-red-50 text-gray-700  border-t">
+    <footer className="bg-[#f8f2ea] text-gray-700  border-t">
       <div className="max-w-7xl mx-auto px-4 py-10 grid md:grid-cols-4 gap-8">
         {/* Brand */}
         <div>
-          <h2 className="text-2xl font-bold flex items-center gap-2 text-red-600">
-            <FaHeart />DonorSync
+          <h2 className="text-2xl font-bold flex items-center gap-2 text-[#5C0000] ">
+            <GiBlood />DonorSync
           </h2>
           <p className="mt-2 text-sm">
             Saving lives, one drop at a time. Join us in making a difference.
@@ -20,7 +21,7 @@ const Footer = () => {
           <h3 className="text-lg font-semibold mb-3">Quick Links</h3>
           <ul className="space-y-2 text-sm">
             <li><Link to="/" className="hover:underline">Home</Link></li>
-            <li><Link to="/donation-requests" className="hover:underline">Donation Requests</Link></li>
+            <li><Link to="/Blood-req" className="hover:underline">Donation Requests</Link></li>
             <li><Link to="/about" className="hover:underline">About Us</Link></li>
             <li><Link to="/contact" className="hover:underline">Contact</Link></li>
           </ul>
@@ -43,7 +44,7 @@ const Footer = () => {
             Email: support@bloodbridge.com <br />
             Phone: +880 1234 567890
           </p>
-          <div className="flex gap-4 mt-3 text-red-500">
+          <div className="flex gap-4 mt-3 text-[#5C0000] ">
             <a href="https://facebook.com" target="_blank"><FaFacebookF /></a>
             <a href="https://twitter.com" target="_blank"><FaTwitter /></a>
             <a href="https://instagram.com" target="_blank"><FaInstagram /></a>

@@ -7,7 +7,7 @@ const useAxiosSecure = () => {
   const { user } = useContext(AuthContext);
   console.log("🚀 ~ useAxiosSecure ~ accessToken:", user.accessToken);
   const instance = axios.create({
-    baseURL: "http://localhost:3000",
+    baseURL: "https://assignment-no-twelve-server.vercel.app",
     headers: {
       Authorization: `Bearer ${user.accessToken}`,
     },

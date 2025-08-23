@@ -1,98 +1,4 @@
-// // src/pages/AddBlog.jsx
-// import React, { useState, useRef } from "react";
-// import { useNavigate } from "react-router";
-// import JoditEditor from "jodit-react";
-// import axios from "axios";
-
-// const AddBlog = () => {
-//   const navigate = useNavigate();
-//   const editor = useRef(null);
-
-//   const [title, setTitle] = useState("");
-//   const [thumbnailUrl, setThumbnailUrl] = useState("");
-//   const [content, setContent] = useState("");
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-
-//     if (!title.trim() || !thumbnailUrl.trim() || !content.trim()) {
-//       alert("Please fill all fields");
-//       return;
-//     }
-
-//     try {
-//       await axios.post("http://localhost:3000/blogs", {
-//         title,
-//         thumbnailUrl,
-//         content,
-//         // status will be set as 'draft' in backend
-//       });
-//       alert("Blog created successfully! Status: draft");
-//       navigate("/dashboard/content-management");
-//     } catch (error) {
-//       console.error("Failed to create blog", error);
-//       alert("Failed to create blog");
-//     }
-//   };
-
-//   return (
-//     <div className="p-4 max-w-3xl mx-auto">
-//       <h2 className="text-2xl font-semibold mb-4 text-red-700">Add Blog</h2>
-
-//       <form onSubmit={handleSubmit} className="space-y-6">
-//         <div>
-//           <label htmlFor="title" className="block font-medium mb-1">Title</label>
-//           <input
-//             id="title"
-//             type="text"
-//             value={title}
-//             onChange={(e) => setTitle(e.target.value)}
-//             className="w-full border border-gray-300 rounded px-3 py-2"
-//             placeholder="Blog title"
-//           />
-//         </div>
-
-//         <div>
-//           <label htmlFor="thumbnailUrl" className="block font-medium mb-1">Thumbnail Image URL</label>
-//           <input
-//             id="thumbnailUrl"
-//             type="text"
-//             value={thumbnailUrl}
-//             onChange={(e) => setThumbnailUrl(e.target.value)}
-//             className="w-full border border-gray-300 rounded px-3 py-2"
-//             placeholder="https://example.com/image.jpg"
-//           />
-//         </div>
-
-//         <div>
-//           <label className="block font-medium mb-1">Content</label>
-//           <JoditEditor
-//             ref={editor}
-//             value={content}
-//             onChange={setContent}
-//             config={{
-//               readonly: false,
-//               height: 300,
-//               toolbarSticky: false,
-//               // You can add more config here
-//             }}
-//           />
-//         </div>
-
-//         <button
-//           type="submit"
-//           className="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700 transition"
-//         >
-//           Create Blog
-//         </button>
-//       </form>
-//     </div>
-//   );
-// };
-
-// export default AddBlog;
 import React, { useContext, useEffect, useState, useRef } from "react";
-// import { AuthContext } from "../../provider/AuthProvider";
 import axios from "axios";
 import JoditEditor from "jodit-react";
 import { useNavigate } from "react-router";
@@ -106,18 +12,16 @@ const AddBlog = () => {
   const [thumbnailUrl, setThumbnailUrl] = useState("");
   const navigate = useNavigate();
 
-  // Blog list
   const [blogs, setBlogs] = useState([]);
   const [filter, setFilter] = useState("all");
   const [userRole, setUserRole] = useState("");
 
   useEffect(() => {
-    axios.get("http://localhost:3000/blogs")
-      .then(res => setBlogs(res.data));
-
+    axios.get("https://assignment-no-twelve-server.vercel.app/blogs").then((res) => setBlogs(res.data));
     if (user?.email) {
-      axios.get(`http://localhost:3000/users/${user.email}`)
-        .then(res => setUserRole(res.data.role));
+      axios
+        .get(`https://assignment-no-twelve-server.vercel.app/users/${user.email}`)
+        .then((res) => setUserRole(res.data.role));
     }
   }, [user]);
 
@@ -129,10 +33,10 @@ const AddBlog = () => {
       content,
       author: user.displayName || "Unknown",
       email: user.email,
-      status: "draft"
+      status: "draft",
     };
     try {
-      const res = await axios.post("http://localhost:3000/blogs", newBlog);
+      const res = await axios.post("https://assignment-no-twelve-server.vercel.app/blogs", newBlog);
       if (res.data.insertedId) {
         alert("Blog created as draft");
         setBlogs([...blogs, newBlog]);
@@ -145,44 +49,40 @@ const AddBlog = () => {
     }
   };
 
-  const filteredBlogs = blogs.filter(blog =>
+  const filteredBlogs = blogs.filter((blog) =>
     filter === "all" ? true : blog.status === filter
   );
 
   const toggleStatus = async (id, newStatus) => {
-    await axios.put(`http://localhost:3000/blogs/${id}`, { status: newStatus });
-    setBlogs(prev =>
-      prev.map(blog =>
-        blog._id === id ? { ...blog, status: newStatus } : blog
-      )
+    await axios.put(`https://assignment-no-twelve-server.vercel.app/blogs/${id}`, { status: newStatus });
+    setBlogs((prev) =>
+      prev.map((blog) => (blog._id === id ? { ...blog, status: newStatus } : blog))
     );
   };
 
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this blog?")) return;
-    await axios.delete(`http://localhost:3000/blogs/${id}`);
-    setBlogs(prev => prev.filter(blog => blog._id !== id));
+    await axios.delete(`https://assignment-no-twelve-server.vercel.app/blogs/${id}`);
+    setBlogs((prev) => prev.filter((blog) => blog._id !== id));
   };
 
   return (
-    <div className="p-4 md:p-8">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-semibold">Add Blog</h2>
-        <button
-          onClick={() => navigate("/dashboard/add-blog")}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
-        >
-          Add Blog
-        </button>
+    <div className="p-4 md:p-10">
+      <div className="flex justify-between items-center mb-8">
+        <h2 className="text-2xl md:text-3xl font-bold text-[#5C0000]">Post a Blog</h2>
+        
       </div>
 
-      <form onSubmit={handleSubmit} className="bg-white shadow p-4 rounded space-y-4">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white border border-gray-200 shadow-sm p-6 rounded-lg space-y-5"
+      >
         <input
           type="text"
-          placeholder="Title"
+          placeholder="Enter Blog Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full border px-3 py-2 rounded"
+          className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#5C0000]"
           required
         />
         <input
@@ -190,7 +90,7 @@ const AddBlog = () => {
           placeholder="Thumbnail Image URL"
           value={thumbnailUrl}
           onChange={(e) => setThumbnailUrl(e.target.value)}
-          className="w-full border px-3 py-2 rounded"
+          className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#5C0000]"
           required
         />
         <JoditEditor
@@ -202,20 +102,20 @@ const AddBlog = () => {
         />
         <button
           type="submit"
-          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+          className="bg-[#5C0000] hover:bg-[#450000] text-white font-semibold px-6 py-2 rounded-md transition-all duration-200 shadow"
         >
-          Create
+          	Set Up
         </button>
       </form>
 
-      <hr className="my-6" />
+      <hr className="my-10" />
 
-      <div className="flex justify-between items-center mb-4">
-        <h3 className="text-xl font-semibold">All Blogs</h3>
+      <div className="flex justify-between items-center mb-6">
+        <h3 className="text-xl font-semibold text-[#5C0000]">Your Content</h3>
         <select
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
-          className="border border-gray-300 rounded px-3 py-1"
+          className="border border-gray-300 rounded px-3 py-1 focus:outline-none focus:ring-2 focus:ring-[#5C0000]"
         >
           <option value="all">All</option>
           <option value="draft">Draft</option>
@@ -223,46 +123,54 @@ const AddBlog = () => {
         </select>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filteredBlogs.map(blog => (
-          <div key={blog._id} className="border rounded shadow p-4 bg-white">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {filteredBlogs.map((blog) => (
+          <div
+            key={blog._id}
+            className="bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden"
+          >
             <img
               src={blog.thumbnailUrl}
               alt={blog.title}
-              className="h-40 w-full object-cover rounded mb-3"
+              className="h-40 w-full object-cover"
             />
-            <h4 className="text-lg font-semibold mb-1">{blog.title}</h4>
-            <p className="text-sm text-gray-600 mb-2">
-              Status:{" "}
-              <span className={`font-medium ${blog.status === "published" ? "text-green-600" : "text-orange-500"}`}>
-                {blog.status}
-              </span>
-            </p>
-            <div className="flex flex-wrap gap-2 mt-2">
+            <div className="p-4">
+              <h4 className="text-lg font-semibold text-gray-800">{blog.title}</h4>
+              <p className="text-sm text-gray-600 mb-2">
+                Status:{" "}
+                <span
+                  className={`font-medium ${
+                    blog.status === "published" ? "text-green-600" : "text-orange-500"
+                  }`}
+                >
+                  {blog.status}
+                </span>
+              </p>
+
               {userRole === "admin" && (
-                <>
+                <div className="flex flex-wrap gap-2 mt-2">
                   {blog.status === "draft" ? (
                     <button
                       onClick={() => toggleStatus(blog._id, "published")}
-                      className="px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700"
+                      className="bg-[#5C0000] hover:bg-[#450000] text-white text-sm px-4 py-1 rounded-md transition"
                     >
                       Publish
                     </button>
                   ) : (
                     <button
                       onClick={() => toggleStatus(blog._id, "draft")}
-                      className="px-3 py-1 bg-yellow-500 text-white text-sm rounded hover:bg-yellow-600"
+                      className="bg-[#5C0000] hover:bg-[#5C0000] text-white text-sm px-4 py-1 rounded-md transition"
                     >
                       Unpublish
                     </button>
                   )}
                   <button
                     onClick={() => handleDelete(blog._id)}
-                    className="px-3 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700"
+                    className="bg-red-600 hover:bg-red-700 text-white text-sm px-4 py-1 rounded-md transition"
                   >
                     Delete
                   </button>
-                </>
+                </div>
               )}
             </div>
           </div>

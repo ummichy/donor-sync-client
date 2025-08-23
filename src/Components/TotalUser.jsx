@@ -8,7 +8,7 @@ const TotalUser = () => {
 
   // useEffect(() => {
   //   // Fetch all users
-  //   axios.get("http://localhost:3000/users")
+  //   axios.get("https://assignment-no-twelve-server.vercel.app/users")
   //     .then(res => {
   //       const donors = res.data.filter(user => user.role === "donor");
   //       setUserCount(donors.length);
@@ -16,20 +16,20 @@ const TotalUser = () => {
   //     .catch(err => console.error("Error fetching users:", err));
 
   //   // Fetch all donations
-  //   axios.get("http://localhost:3000/donations/all")
+  //   axios.get("https://assignment-no-twelve-server.vercel.app/donations/all")
   //     .then(res => setDonationCount(res.data.length))
   //     .catch(err => console.error("Error fetching donations:", err));
   // }, []);
   useEffect(() => {
   // Fetch all users
-  axios.get("http://localhost:3000/users")
+  axios.get("https://assignment-no-twelve-server.vercel.app/users")
     .then(res => {
       setUserCount(res.data.length); // total users
     })
     .catch(err => console.error("Error fetching users:", err));
 
   // Fetch all donations
-  axios.get("http://localhost:3000/donations/all")
+  axios.get("https://assignment-no-twelve-server.vercel.app/donations/all")
     .then(res => setDonationCount(res.data.length))
     .catch(err => console.error("Error fetching donations:", err));
 }, []);
@@ -38,14 +38,14 @@ const TotalUser = () => {
     {
       title: "Total Donors",
       count: userCount,
-      icon: <UserPlus className="w-10 h-10 text-blue-600" />,
-      bg: "bg-blue-100"
+      icon: <UserPlus className="w-10 h-10 text-[#5C0000]" />,
+      bg: "bg-[#f8f2ea]"
     },
     {
       title: "Total Donation Requests",
       count: donationCount,
-      icon: <Droplet className="w-10 h-10 text-red-600" />,
-      bg: "bg-red-100"
+      icon: <Droplet className="w-10 h-10 text-[#5C0000]" />,
+      bg: "bg-[#f8f2ea]"
     }
   ];
 

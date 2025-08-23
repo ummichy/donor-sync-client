@@ -1,91 +1,39 @@
-import {
-  createUserWithEmailAndPassword,
-  deleteUser,
-  getAuth,
-  GoogleAuthProvider,
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  signInWithPopup,
-  signOut,
-  updateProfile,
-} from "firebase/auth";
+// src/Provider/AuthProvider.jsx
 import { createContext, useEffect, useState } from "react";
-import { app } from "../firebase/firebase.init";
-import useAxiosPublic from "../hooks/axiosPublic";
+import { createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from "../firebase/firebase.config";
 
-export const AuthContext = createContext();
+// Create the context
+export const AuthContext = createContext(null);
 
 const AuthProvider = ({ children }) => {
-  const auth = getAuth(app);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const axiosPublic = useAxiosPublic();
 
+  // Register user
   const createUser = (email, password) => {
+    setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
-  const signIn = (email, password) => {
-    return signInWithEmailAndPassword(auth, email, password);
-  };
-
-  const googleProvider = new GoogleAuthProvider();
-
-  const googleSignIn = () => {
-    return signInWithPopup(auth, googleProvider);
-  };
-
-  const updateUser = (userInfo) => {
-    return updateProfile(auth.currentUser, userInfo);
-  };
-
-  const removeUser = (user) => {
-    return deleteUser(user);
-  };
-
+  // Logout
   const logOut = () => {
+    setLoading(true);
     return signOut(auth);
   };
 
+  // Observe auth state
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      console.log("🚀 ~ Auth Changed:", currentUser);
-
-      if (currentUser) {
-        axiosPublic
-          .post("/add-user", {
-            email: currentUser.email,
-            loginCount: 1, // ✅ Removed "role" key
-          })
-          .then((res) => {
-            setUser(currentUser);
-            setLoading(false);
-          })
-          .catch((err) => {
-            console.error("add-user error:", err);
-            setUser(currentUser); // still set user
-            setLoading(false);
-          });
-      } else {
-        setUser(null);
-        setLoading(false);
-      }
+      setUser(currentUser);
+      setLoading(false);
+      console.log("User auth details",currentUser);
     });
 
     return () => unsubscribe();
   }, []);
 
-  const authInfo = {
-    user,
-    loading,
-    createUser,
-    signIn,
-    setUser,
-    logOut,
-    googleSignIn,
-    updateUser,
-    removeUser,
-  };
+  const authInfo = { user, loading, createUser, logOut };
 
   return (
     <AuthContext.Provider value={authInfo}>

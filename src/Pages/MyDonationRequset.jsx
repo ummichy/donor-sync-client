@@ -12,11 +12,14 @@ const MyDonationRequest = () => {
   const [statusFilter, setStatusFilter] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Fetch user's donation requests from backend
   useEffect(() => {
     if (!user?.email) return;
     axios
-      .get(`http://localhost:3000/donations/user/${user.email}`)
+      .get(`https://assignment-no-twelve-server.vercel.app/donations/user/${user.email}`, {
+        headers: {
+          authorization: `Bearer ${user.accessToken}`,
+        },
+      })
       .then((res) => {
         setRequests(res.data);
         setFilteredRequests(res.data);
@@ -26,7 +29,6 @@ const MyDonationRequest = () => {
       });
   }, [user]);
 
-  // Filter requests by status
   useEffect(() => {
     if (statusFilter === "all") {
       setFilteredRequests(requests);
@@ -37,10 +39,9 @@ const MyDonationRequest = () => {
         )
       );
     }
-    setCurrentPage(1); // Reset to first page when filter changes
+    setCurrentPage(1);
   }, [statusFilter, requests]);
 
-  // Pagination calculations
   const totalPages = Math.ceil(filteredRequests.length / PAGE_SIZE);
   const paginatedRequests = filteredRequests.slice(
     (currentPage - 1) * PAGE_SIZE,
@@ -52,19 +53,24 @@ const MyDonationRequest = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-4 sm:p-6">
-      <h2 className="text-xl font-semibold mb-4 text-indigo-700">My Donation Requests</h2>
+    <div className="max-w-4xl mx-auto p-6 sm:p-8 bg-white rounded-lg shadow-md">
+      <h2 className="text-2xl font-extrabold mb-6 text-[#5C0000] text-center">
+        My Donation Requests
+      </h2>
 
       {/* Filter */}
-      <div className="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-        <label htmlFor="statusFilter" className="font-medium text-gray-700">
+      <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <label
+          htmlFor="statusFilter"
+          className="font-semibold text-gray-800"
+        >
           Filter by Status:
         </label>
         <select
           id="statusFilter"
           value={statusFilter}
           onChange={handleStatusChange}
-          className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="border border-[#5C0000] rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#5C0000] text-gray-700"
         >
           <option value="all">All</option>
           <option value="pending">Pending</option>
@@ -75,35 +81,57 @@ const MyDonationRequest = () => {
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto border rounded shadow-sm">
+      <div className="overflow-x-auto rounded-lg border border-[#5C0000] shadow-sm">
         <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-indigo-600 text-white">
+          <thead className="bg-[#5C0000] text-white">
             <tr>
-              <th className="px-3 py-2 text-left text-sm font-semibold">Recipient</th>
-              <th className="px-3 py-2 text-left text-sm font-semibold">District</th>
-              <th className="px-3 py-2 text-left text-sm font-semibold">Blood Group</th>
-              <th className="px-3 py-2 text-left text-sm font-semibold">Date</th>
-              <th className="px-3 py-2 text-left text-sm font-semibold">Status</th>
+              <th className="px-4 py-3 text-left text-sm font-semibold tracking-wide">
+                Recipient
+              </th>
+              <th className="px-4 py-3 text-left text-sm font-semibold tracking-wide">
+                District
+              </th>
+              <th className="px-4 py-3 text-left text-sm font-semibold tracking-wide">
+                Blood Group
+              </th>
+              <th className="px-4 py-3 text-left text-sm font-semibold tracking-wide">
+                Date
+              </th>
+              <th className="px-4 py-3 text-left text-sm font-semibold tracking-wide">
+                Status
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100 bg-white">
             {paginatedRequests.length === 0 ? (
               <tr>
-                <td colSpan={5} className="text-center py-4 text-gray-500">
+                <td
+                  colSpan={5}
+                  className="text-center py-6 text-gray-500 italic"
+                >
                   No donation requests found.
                 </td>
               </tr>
             ) : (
               paginatedRequests.map((req) => (
-                <tr key={req._id}>
-                  <td className="px-3 py-2 whitespace-nowrap">{req.recipientName}</td>
-                  <td className="px-3 py-2 whitespace-nowrap">{req.district}</td>
-                  <td className="px-3 py-2 whitespace-nowrap font-semibold">{req.bloodGroup}</td>
-                  <td className="px-3 py-2 whitespace-nowrap">
+                <tr
+                  key={req._id}
+                  className="hover:bg-[#f4ebe9] transition-colors duration-200"
+                >
+                  <td className="px-4 py-3 whitespace-nowrap font-medium text-gray-800">
+                    {req.recipientName}
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap text-gray-700">
+                    {req.district}
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap font-semibold text-[#5C0000]">
+                    {req.bloodGroup}
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap text-gray-700">
                     {new Date(req.donationDate).toLocaleDateString()}
                   </td>
                   <td
-                    className={`px-3 py-2 whitespace-nowrap font-semibold capitalize ${
+                    className={`px-4 py-3 whitespace-nowrap font-semibold capitalize ${
                       req.status === "pending"
                         ? "text-yellow-600"
                         : req.status === "inprogress"
@@ -111,7 +139,7 @@ const MyDonationRequest = () => {
                         : req.status === "done"
                         ? "text-green-600"
                         : req.status === "canceled"
-                        ? "text-red-600"
+                        ? "text-[#5C0000]"
                         : ""
                     }`}
                   >
@@ -124,13 +152,13 @@ const MyDonationRequest = () => {
         </table>
       </div>
 
-      {/* Pagination controls */}
+      {/* Pagination */}
       {totalPages > 1 && (
-        <div className="mt-4 flex justify-center space-x-2">
+        <div className="mt-6 flex justify-center space-x-3">
           <button
             disabled={currentPage === 1}
             onClick={() => setCurrentPage((p) => p - 1)}
-            className="px-3 py-1 rounded border border-indigo-600 text-indigo-600 disabled:opacity-50"
+            className="px-4 py-2 rounded border border-[#5C0000] text-[#5C0000] disabled:opacity-50 hover:bg-[#5C0000] hover:text-white transition"
           >
             Prev
           </button>
@@ -139,10 +167,10 @@ const MyDonationRequest = () => {
             <button
               key={i}
               onClick={() => setCurrentPage(i + 1)}
-              className={`px-3 py-1 rounded border ${
+              className={`px-4 py-2 rounded border text-sm font-semibold transition ${
                 currentPage === i + 1
-                  ? "bg-indigo-600 text-white"
-                  : "border-indigo-600 text-indigo-600 hover:bg-indigo-100"
+                  ? "bg-[#5C0000] text-white border-[#5C0000]"
+                  : "border-[#5C0000] text-[#5C0000] hover:bg-[#f2e8e7]"
               }`}
             >
               {i + 1}
@@ -152,7 +180,7 @@ const MyDonationRequest = () => {
           <button
             disabled={currentPage === totalPages}
             onClick={() => setCurrentPage((p) => p + 1)}
-            className="px-3 py-1 rounded border border-indigo-600 text-indigo-600 disabled:opacity-50"
+            className="px-4 py-2 rounded border border-[#5C0000] text-[#5C0000] disabled:opacity-50 hover:bg-[#5C0000] hover:text-white transition"
           >
             Next
           </button>

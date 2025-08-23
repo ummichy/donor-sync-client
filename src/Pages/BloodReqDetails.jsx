@@ -14,7 +14,7 @@ const BloodReqDetails = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/donations/${id}`)
+      .get(`https://assignment-no-twelve-server.vercel.app/donations/${id}`)
       .then((res) => {
         setDonation(res.data);
         setLoading(false);
@@ -27,7 +27,7 @@ const BloodReqDetails = () => {
 
   const handleDonateConfirm = () => {
     axios
-      .put(`http://localhost:3000/donations/${id}`, {
+      .put(`https://assignment-no-twelve-server.vercel.app/donations/${id}`, {
         status: "inprogress",
         donorName: user.displayName,
         donorEmail: user.email,
@@ -46,123 +46,120 @@ const BloodReqDetails = () => {
       });
   };
 
-  if (loading) return <div className="p-6">Loading...</div>;
-  if (!donation) return <div className="p-6">Donation not found</div>;
+  if (loading) return <div className="p-6 text-center text-gray-600">Loading...</div>;
+  if (!donation) return <div className="p-6 text-center text-gray-600">Donation not found</div>;
 
   return (
-    <div className="max-w-3xl mx-auto p-6 mt-6 bg-white rounded shadow mt-16">
-      <button
-        onClick={() => navigate(-1)}
-        className="mb-4 px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
-      >
-        &larr; Back
-      </button>
-
-      <h2 className="text-2xl font-semibold text-red-700 mb-6">
+    <div className="max-w-4xl mx-auto px-6 py-10 mb-14 mt-20 bg-white rounded-2xl shadow-xl border border-[#e8ddd0]">
+      {/* Heading */}
+      <h2 className="text-3xl font-bold text-[#5C0000] mb-8 text-center tracking-tight">
         Donation Request Details
       </h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        <div>
-          <h3 className="font-semibold text-gray-700">Requester Name:</h3>
-          <p>{donation.requesterName}</p>
-        </div>
-        <div>
-          <h3 className="font-semibold text-gray-700">Recipient Name:</h3>
-          <p>{donation.recipientName}</p>
-        </div>
-        <div>
-          <h3 className="font-semibold text-gray-700">District:</h3>
-          <p>{donation.district}</p>
-        </div>
-        <div>
-          <h3 className="font-semibold text-gray-700">Upazila:</h3>
-          <p>{donation.upazila}</p>
-        </div>
-        <div>
-          <h3 className="font-semibold text-gray-700">Donation Date:</h3>
-          <p>{new Date(donation.donationDate).toLocaleDateString()}</p>
-        </div>
-        <div>
-          <h3 className="font-semibold text-gray-700">Donation Time:</h3>
-          <p>{donation.donationTime}</p>
-        </div>
-        <div>
-          <h3 className="font-semibold text-gray-700">Blood Group:</h3>
-          <p>{donation.bloodGroup}</p>
-        </div>
+      {/* Details */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-gray-800">
+        {[
+          ["Requester Name", donation.requesterName],
+          ["Recipient Name", donation.recipientName],
+          ["District", donation.district],
+          ["Upazila", donation.upazila],
+          ["Donation Date", new Date(donation.donationDate).toLocaleDateString()],
+          ["Donation Time", donation.donationTime],
+          ["Blood Group", <span className="font-bold text-[#5C0000]">{donation.bloodGroup}</span>],
+        ].map(([label, value], idx) => (
+          <div key={idx}>
+            <h3 className="font-semibold text-[#5C0000] mb-1">{label}:</h3>
+            <p>{value}</p>
+          </div>
+        ))}
+
         <div className="sm:col-span-2">
-          <h3 className="font-semibold text-gray-700">Message:</h3>
+          <h3 className="font-semibold text-[#5C0000] mb-1">Message:</h3>
           <p>{donation.message || "No additional message"}</p>
         </div>
+
         <div>
-          <h3 className="font-semibold text-gray-700">Status:</h3>
+          <h3 className="font-semibold text-[#5C0000] mb-1">Status:</h3>
           <p
-            className={`capitalize font-medium ${
-              donation.status === "pending"
-                ? "text-yellow-600"
-                : donation.status === "inprogress"
-                ? "text-blue-600"
-                : donation.status === "done"
-                ? "text-green-600"
-                : "text-red-600"
-            }`}
+            className={`capitalize font-semibold px-3 py-1 rounded inline-block
+              ${
+                donation.status === "pending"
+                  ? "bg-yellow-100 text-yellow-800"
+                  : donation.status === "inprogress"
+                  ? "bg-blue-100 text-[#5C0000]"
+                  : donation.status === "done"
+                  ? "bg-green-100 text-[#5C0000]"
+                  : "bg-red-100 text-[#5C0000]"
+              }`}
           >
             {donation.status}
           </p>
         </div>
       </div>
 
-      {donation.status === "pending" && (
-        <div className="mt-6 text-center">
+      {/* Buttons side by side */}
+      <div className="flex justify-center gap-6 mt-10">
+        <button
+          onClick={() => navigate(-1)}
+          className="px-6 py-2 bg-gray-300 rounded hover:bg-gray-400 transition"
+        >
+          &larr; Back
+        </button>
+
+        {donation.status === "pending" && (
           <button
             onClick={() => setShowModal(true)}
-            className="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700"
+            className="bg-[#5C0000] hover:bg-[#4a0000] text-white font-medium px-6 py-2 rounded-md transition"
           >
             Donate
           </button>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-40 flex items-center justify-center">
-          <div className="bg-white p-6 rounded shadow-lg w-[95%] sm:w-[400px]">
-            <h3 className="text-xl font-semibold mb-4 text-center">Confirm Donation</h3>
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center px-4 transition-all">
+          <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-md border border-[#e6d9cd]">
+            <h3 className="text-xl font-bold text-center text-[#5C0000] mb-5">
+              Confirm Donation
+            </h3>
+
             <div className="mb-4">
-              <label className="block font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Donor Name
               </label>
               <input
                 type="text"
                 readOnly
                 value={user?.displayName || ""}
-                className="w-full border border-gray-300 p-2 rounded bg-gray-100"
+                className="w-full border border-gray-300 p-2 rounded-md bg-gray-100"
               />
             </div>
+
             <div className="mb-4">
-              <label className="block font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Donor Email
               </label>
               <input
                 type="text"
                 readOnly
                 value={user?.email || ""}
-                className="w-full border border-gray-300 p-2 rounded bg-gray-100"
+                className="w-full border border-gray-300 p-2 rounded-md bg-gray-100"
               />
             </div>
-            <div className="flex justify-between mt-6">
+
+            <div className="flex justify-end mt-6 space-x-3">
               <button
                 onClick={() => setShowModal(false)}
-                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 transition"
               >
                 Cancel
               </button>
               <button
                 onClick={handleDonateConfirm}
-                className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+                className="px-4 py-2 bg-[#5C0000] text-white rounded hover:bg-[#4a0000] transition"
               >
-                Confirm Donation
+                Confirm
               </button>
             </div>
           </div>

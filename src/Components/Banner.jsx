@@ -10,45 +10,51 @@ const Banner = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
-      className="bg-gradient-to-r from-red-200 via-red-100 to-red-200 text-red-900 py-20 px-4 md:px-10 text-center"
+      className="relative h-[80vh] sm:h-[70vh] md:h-[80vh] lg:h-screen bg-cover bg-center bg-no-repeat flex items-center overflow-hidden"
+
+      style={{
+        backgroundImage: "url('https://i.ibb.co/r2GfVYfv/bg.jpg')",
+      }}
     >
-      <motion.h1
-        initial={{ y: -40, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.3, duration: 0.6 }}
-        className="text-4xl md:text-5xl font-extrabold mb-5"
-      >
-        Join as a Donor
-      </motion.h1>
-
-      <motion.p
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.6, duration: 0.6 }}
-        className="text-lg md:text-xl max-w-2xl mx-auto mb-10"
-      >
-        Donate blood, save lives. Be the reason someone gets a second chance. Our
-        community connects donors with patients in urgent need.
-      </motion.p>
-
+      {/* Content */}
       <motion.div
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ delay: 0.8, duration: 0.5 }}
-        className="flex flex-col sm:flex-row justify-center gap-4"
+        initial={{ x: -50, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ delay: 0.4, duration: 0.7 }}
+        className="relative z-10 max-w-xl ml-4 md:ml-24 lg:ml-20 px-4 md:px-8 lg:px-12 text-center lg:text-left"
       >
-        <button
-          onClick={() => navigate("/register")}
-          className="bg-red-500 hover:bg-red-600 text-white font-bold px-6 py-3 rounded-full shadow-lg transition duration-300 transform hover:scale-105"
+        <h1
+          className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4 md:mb-6"
+          style={{ color: "#5C0000" }}
         >
-          Join as a Donor
-        </button>
-        <button
-          onClick={() => navigate("/search")}
-          className="bg-white hover:bg-red-100 text-red-500 border border-red-500 font-bold px-6 py-3 rounded-full shadow-md transition duration-300 transform hover:scale-105"
+          Make a <span className="text-white">Life</span>saving{" "}
+          <span className="text-center">Impact</span>
+        </h1>
+
+        <p
+          className="text-base sm:text-lg text-white md:text-xl mb-6 md:mb-8"
+          // style={{ color: "#5C0000" }}
         >
-          Search Donors
-        </button>
+          Every drop counts. Become a blood donor and help save lives when it
+          matters most. Join our mission to connect compassionate donors with
+          patients in urgent need of hope and healing.
+        </p>
+
+        <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+          <button
+            onClick={() => navigate("/register")}
+            className="bg-[#5C0000] hover:bg-[#3f0000] text-white font-semibold px-6 py-3 rounded-md shadow-md hover:shadow-lg transition-all duration-300 border border-transparent"
+          >
+            Join as a Donor
+          </button>
+
+          <button
+            onClick={() => navigate("/search")}
+            className="bg-white/70 hover:bg-[#5C0000] hover:text-white text-[#5C0000] font-semibold px-6 py-3 rounded-md shadow-md hover:shadow-lg border border-[#5C0000] transition-all duration-300"
+          >
+            Search Donors
+          </button>
+        </div>
       </motion.div>
     </motion.section>
   );

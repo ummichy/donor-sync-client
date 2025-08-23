@@ -1,145 +1,200 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Link, useNavigate } from "react-router";
-import { AuthContext } from "../Provider/AuthProvider";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { toast } from "react-toastify";
-import Lottie from "lottie-react";
-import registerLottie from "../assets/Lotties/lottie.json";
-
-const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../provider/AuthProvider";
+import { updateProfile } from "firebase/auth";
+import Swal from "sweetalert2";
 
 const Register = () => {
-  const { createUser, setUser, updateUser } = useContext(AuthContext);
-  const [error, setError] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
+  const { createUser } = useContext(AuthContext);
+
   const [districts, setDistricts] = useState([]);
   const [upazilas, setUpazilas] = useState([]);
-  const navigate = useNavigate();
+  const [selectedDistrictId, setSelectedDistrictId] = useState("");
+  const [filteredUpazilas, setFilteredUpazilas] = useState([]);
+  const [error, setError] = useState("");
 
-  // Load districts and upazilas from public folder JSONs
   useEffect(() => {
     fetch("/district.json")
       .then((res) => res.json())
-      .then((data) => setDistricts(data));
-
-    fetch("/upazila.json")
-      .then((res) => res.json())
-      .then((data) => setUpazilas(data));
+      .then(setDistricts)
+      .catch(console.error);
   }, []);
 
-  const validatePassword = (password) => {
-    return /[A-Z]/.test(password) && /[a-z]/.test(password) && password.length >= 6;
-  };
+  useEffect(() => {
+    fetch("/upazila.json")
+      .then((res) => res.json())
+      .then(setUpazilas)
+      .catch(console.error);
+  }, []);
 
-  const handleRegister = async (e) => {
+  useEffect(() => {
+    if (selectedDistrictId) {
+      const filtered = upazilas.filter(
+        (upazila) => upazila.district_id === selectedDistrictId
+      );
+      setFilteredUpazilas(filtered);
+    } else {
+      setFilteredUpazilas([]);
+    }
+  }, [selectedDistrictId, upazilas]);
+
+  const handleRegister = (e) => {
     e.preventDefault();
-    const form = e.target;
-    const name = form.name.value;
-    const photo = form.photo.value;
-    const email = form.email.value;
-    const password = form.password.value;
-    const confirm = form.confirm.value;
-    const blood = form.blood.value;
-    const district = form.district.value;
-    const upazila = form.upazila.value;
-
     setError("");
 
-    if (!validatePassword(password)) {
-      toast.error("Password must include uppercase, lowercase, and be at least 6 characters.");
-      return;
-    }
+    const form = e.target;
+    const email = form.email.value;
+    const name = form.name.value;
+    const avatar = form.avatar.value;
+    const bloodGroup = form.blood.value;
+    const district = form.district.value;
+    const upazila = form.upazila.value;
+    const password = form.password.value;
+    const confirm = form.confirm.value;
 
     if (password !== confirm) {
-      toast.error("Passwords do not match.");
+      setError("Passwords do not match");
       return;
     }
 
-    try {
-      const result = await createUser(email, password);
-      await updateUser({ displayName: name, photoURL: photo });
-      setUser({
-        ...result.user,
-        displayName: name,
-        photoURL: photo,
-        blood,
-        district,
-        upazila,
-        role: "donor",
-        status: "active",
+    createUser(email, password)
+      .then((res) => {
+        const registeredUser = res.user;
+
+        updateProfile(registeredUser, {
+          displayName: name,
+          photoURL: avatar,
+        }).then(() => {
+          fetch("https://assignment-no-twelve-server.vercel.app/users", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email,
+              name,
+              avatar,
+              bloodGroup,
+              district,
+              upazila,
+              role: "donor",
+              status: "active",
+            }),
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              console.log("User saved to DB:", data);
+              form.reset();
+              setSelectedDistrictId("");
+              setFilteredUpazilas([]);
+            })
+            .catch(console.error);
+
+          form.reset();
+          setSelectedDistrictId("");
+          setFilteredUpazilas([]);
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+        setError(err.message);
       });
-      toast.success("Registration successful!");
-      navigate("/");
-    } catch (err) {
-      toast.error(err.message);
-    }
   };
 
   return (
-    <div className="flex flex-col lg:flex-row items-center justify-center pt-32 pb-10 px-4 max-w-screen-xl mx-auto gap-10">
-      <div className="bg-[#edeceb] w-full lg:w-1/2">
-        <div className="card bg-base-100 w-full shadow-2xl p-6">
-          <h2 className="font-semibold text-2xl text-center">Register your account</h2>
-          <form onSubmit={handleRegister} className="card-body p-0 mt-4 space-y-2">
+    <div className="max-w-xl mx-auto my-28 px-8 py-10 bg-white border border-gray-200 rounded-2xl shadow-lg">
+      <h2 className="text-3xl font-semibold text-center text-[#5C0000] mb-2">
+        Create Your Account
+      </h2>
+      <p className="text-center text-sm text-gray-500 mb-6">
+        Join our community of blood donors and save lives.
+      </p>
 
-            <label>Name</label>
-            <input name="name" type="text" className="input input-bordered w-full" required />
+      <form onSubmit={handleRegister} className="space-y-4">
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          required
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#5C0000]/40"
+        />
+        <input
+          type="text"
+          name="name"
+          placeholder="Full Name"
+          required
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#5C0000]/40"
+        />
+        <input
+          type="url"
+          name="avatar"
+          placeholder="Avatar URL (optional)"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#5C0000]/40"
+        />
 
-            <label>Photo URL (ImageBB)</label>
-            <input name="photo" type="text" className="input input-bordered w-full" required />
+        <select
+          name="blood"
+          required
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-600"
+        >
+          <option value="">Select Blood Group</option>
+          {["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"].map((group) => (
+            <option key={group} value={group}>
+              {group}
+            </option>
+          ))}
+        </select>
 
-            <label>Email</label>
-            <input name="email" type="email" className="input input-bordered w-full" required />
+        <select
+          name="district"
+          required
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-600"
+          onChange={(e) => setSelectedDistrictId(e.target.value)}
+        >
+          <option value="">Select District</option>
+          {districts.map((district) => (
+            <option key={district.id} value={district.id}>
+              {district.name}
+            </option>
+          ))}
+        </select>
 
-            <label>Blood Group</label>
-            <select name="blood" className="select select-bordered w-full" required>
-              <option value="">Select Blood Group</option>
-              {bloodGroups.map(bg => <option key={bg} value={bg}>{bg}</option>)}
-            </select>
+        <select
+          name="upazila"
+          required
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-600"
+        >
+          <option value="">Select Upazila</option>
+          {filteredUpazilas.map((upazila) => (
+            <option key={upazila.id} value={upazila.name}>
+              {upazila.name}
+            </option>
+          ))}
+        </select>
 
-            <label>District</label>
-            <select name="district" className="select select-bordered w-full" required>
-              <option value="">Select District</option>
-              {districts.map(d => <option key={d.id} value={d.name}>{d.name}</option>)}
-            </select>
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          required
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#5C0000]/40"
+        />
+        <input
+          type="password"
+          name="confirm"
+          placeholder="Confirm Password"
+          required
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#5C0000]/40"
+        />
 
-            <label>Upazila</label>
-            <select name="upazila" className="select select-bordered w-full" required>
-              <option value="">Select Upazila</option>
-              {upazilas.map(u => <option key={u.id} value={u.name}>{u.name}</option>)}
-            </select>
+        {error && <p className="text-sm text-red-600">{error}</p>}
 
-            <label>Password</label>
-            <div className="relative">
-              <input name="password" type={showPassword ? "text" : "password"} className="input input-bordered w-full" required />
-              <button type="button" className="absolute right-3 top-1/2 transform -translate-y-1/2" onClick={() => setShowPassword(!showPassword)}>
-                {showPassword ? <FaEyeSlash /> : <FaEye />}
-              </button>
-            </div>
-
-            <label>Confirm Password</label>
-            <div className="relative">
-              <input name="confirm" type={showConfirm ? "text" : "password"} className="input input-bordered w-full" required />
-              <button type="button" className="absolute right-3 top-1/2 transform -translate-y-1/2" onClick={() => setShowConfirm(!showConfirm)}>
-                {showConfirm ? <FaEyeSlash /> : <FaEye />}
-              </button>
-            </div>
-
-            {error && <p className="text-error text-sm">{error}</p>}
-
-            <button type="submit" className="btn btn-neutral mt-4 hover:bg-blue-700 transition-colors">Register</button>
-
-            <p className="text-center mt-3">
-              Already have an account? <Link className="text-blue-600" to="/login">Login</Link>
-            </p>
-          </form>
-        </div>
-      </div>
-
-      <div className="w-full lg:w-1/2 hidden lg:flex justify-center">
-        <Lottie style={{ width: '300px' }} animationData={registerLottie} loop={true}></Lottie>
-      </div>
+        <button
+          type="submit"
+          className="w-full bg-[#5C0000] text-white py-2.5 rounded-lg font-semibold hover:bg-[#430000] transition duration-200"
+        >
+          Register
+        </button>
+      </form>
     </div>
   );
 };

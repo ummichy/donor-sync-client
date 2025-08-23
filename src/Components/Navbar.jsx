@@ -1,123 +1,194 @@
-import React, { useContext } from "react";
-import { Link, NavLink } from "react-router"; // ✅ fixed to "react-router-dom"
-import { AuthContext } from "../Provider/AuthProvider";
-import { FaHeartbeat } from "react-icons/fa";
-import { MdDashboard } from "react-icons/md";
-import { toast } from "react-toastify";
-import DashboardLayout from "../Pages/DashboardLayout";
+import { useState, useContext, useRef, useEffect } from "react";
+import { NavLink, useNavigate } from "react-router";
+import { Menu, X, ChevronDown } from "lucide-react";
+import { AuthContext } from "../provider/AuthProvider";
+import { GiBlood } from "react-icons/gi";
 
 const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const { user, logOut } = useContext(AuthContext);
+  const navigate = useNavigate();
 
-  const handleLogout = async () => {
-    try {
-      await logOut();
-      toast.success("Logged out successfully");
-    } catch (error) {
-      toast.error("Logout failed: " + error.message);
-    }
+  const dropdownRef = useRef();
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const navItems = [
+    { name: "Home" },
+    { name: "Donation Requests", path: "/Blood-req" },
+    { name: "Blog", path: "/blogs" },
+    
+  ];
+
+  const linkClasses = ({ isActive }) =>
+    isActive
+      ? "text-[#5C0000]  font-semibold"
+      : "text-gray-700 hover:text-[#5C0000]  transition duration-200";
+
+  const handleLogout = () => {
+    logOut()
+      .then(() => {
+        navigate("/login");
+      })
+      .catch((err) => console.error(err));
   };
 
-  const navLinks = (
-    <>
-      <li>
-        <NavLink to="/" className={({ isActive }) => isActive ? "text-blue-600 font-semibold" : ""}>
-          Home
-        </NavLink>
-      </li>
-      <li>
-        <NavLink to="/donation-requests" className={({ isActive }) => isActive ? "text-blue-600 font-semibold" : ""}>
-          Donation Requests
-        </NavLink>
-      </li>
-      <li>
-        <NavLink to="/blog" className={({ isActive }) => isActive ? "text-blue-600 font-semibold" : ""}>
-          Blog
-        </NavLink>
-      </li>
-      {user && (
-        <li>
-          <NavLink to="/funding-links" className={({ isActive }) => isActive ? "text-blue-600 font-semibold" : ""}>
-            Funding
-          </NavLink>
-        </li>
-      )}
-    </>
-  );
-
   return (
-    <div className="bg-white shadow-md fixed top-0 w-full z-50">
-      <div className="max-w-screen-xl mx-auto px-4 py-2 flex justify-between items-center">
-
-        {/* Logo & Brand Name on the Left */}
-        <div>
-          <Link to="/" className="text-2xl font-bold flex items-center gap-1 text-red-600">
-            <FaHeartbeat className="text-red-600" />
-            DonorSync
-          </Link>
-        </div>
-
-        {/* Navigation and Profile on the Right */}
-        <div className="flex items-center gap-4">
-
-          {/* Large Screen Nav */}
-          <ul className="menu menu-horizontal hidden md:flex gap-3">
-            {navLinks}
-          </ul>
-
-          {/* Avatar & Dropdown (Medium and Larger Devices Only) */}
-          {user && (
-            <div className="dropdown dropdown-end hidden md:block">
-              <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-                <img className="w-10 rounded-full" src={user.photoURL || "/default-avatar.png"} alt="avatar" />
-              </div>
-              <ul tabIndex={0} className="mt-3 z-[2] p-2 shadow menu menu-sm dropdown-content bg-white rounded-box w-52">
-                <li className="text-center text-sm font-semibold">{user.displayName}</li>
-                <li>
-                  <NavLink to="/dashboard" className="flex items-center gap-2">
-                    <DashboardLayout /> Dashboard
-                  </NavLink>
-                </li>
-                <li>
-                  <button onClick={handleLogout}>Logout</button>
-                </li>
-              </ul>
+    <nav className="bg-white/70 backdrop-blur-md shadow border-b border-white/20 fixed top-0 left-0 right-0 z-50
+   
+    ">
+      <div className="mx-auto px-4 sm:px-6 lg:px-32">
+        <div className="flex justify-between items-center h-16">
+          {/* Logo */}
+          <NavLink to="/" className="text-2xl font-bold text-[#5C0000]">
+            <div className="flex items-center gap-2">
+              <GiBlood />
+              <h1>DONOR SYNC</h1>
             </div>
-          )}
+          </NavLink>
 
-          {/* Login Button */}
-          {!user && (
-            <Link to="/login" className="btn btn-sm btn-neutral hidden md:flex">
-              Login
-            </Link>
-          )}
+          {/* Desktop Menu */}
+          <div className="hidden md:flex space-x-6 items-center">
+            {navItems.map((item) => (
+              <NavLink key={item.name} to={item.path} className={linkClasses}>
+                {item.name}
+              </NavLink>
+            ))}
 
-          {/* Mobile dropdown menu */}
-          <div className="dropdown dropdown-end md:hidden">
-            <label tabIndex={0} className="btn btn-ghost">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none"
-                viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                  d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </label>
-            <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[2] p-2 shadow bg-base-100 rounded-box w-52">
-              {navLinks}
-              {user && (
-                <>
-                  <li><Link to="/dashboard">Dashboard</Link></li>
-                  <li><button onClick={handleLogout}>Logout</button></li>
-                </>
-              )}
-              {!user && (
-                <li><Link to="/login">Login</Link></li>
-              )}
-            </ul>
+            {user && (
+              <NavLink to="/funding" className={linkClasses}>
+                Funding
+              </NavLink>
+            )}
+
+            {!user && (
+              <NavLink
+                to="/login"
+                className="bg-[#5C0000]  text-white px-4 py-2 rounded-lg hover:bg-[#5C0000]  transition"
+              >
+                Login
+              </NavLink>
+            )}
+
+            {user && (
+              <div className="relative" ref={dropdownRef}>
+                <button
+                  onClick={() => setDropdownOpen((prev) => !prev)}
+                  className="flex items-center space-x-2 focus:outline-none"
+                  title={user.displayName || "User"}
+                >
+                  <img
+                    src={user.photoURL || "/default-avatar.png"}
+                    alt="avatar"
+                    className="w-8 h-8 rounded-full object-cover border border-gray-300"
+                  />
+                  <ChevronDown size={16} />
+                </button>
+
+                {dropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg py-2 z-50">
+                    <NavLink
+                      to="/dashboard"
+                      className="block px-4 py-2 text-gray-700 hover:bg-[#f8f2ea]"
+                      onClick={() => setDropdownOpen(false)}
+                    >
+                      Dashboard
+                    </NavLink>
+                    <button
+                      onClick={() => {
+                        setDropdownOpen(false);
+                        handleLogout();
+                      }}
+                      className="w-full text-left px-4 py-2 text-gray-700 hover:bg-[#f8f2ea] "
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
-        </div>
 
+          {/* Mobile menu button */}
+          <button
+            className="md:hidden text-gray-700 focus:outline-none"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            {isOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
+        </div>
       </div>
-    </div>
+
+      {/* Mobile dropdown menu */}
+      {isOpen && (
+        <div className="md:hidden bg-white/80 backdrop-blur-md px-4 pb-4 pt-2 shadow-md space-y-2">
+          {navItems.map((item) => (
+            <NavLink
+              key={item.name}
+              to={item.path}
+              onClick={() => setIsOpen(false)}
+              className={({ isActive }) =>
+                `block ${
+                  isActive
+                    ? "text-[#5C0000]  font-semibold"
+                    : "text-gray-700 hover:text-[#5C0000] "
+                }`
+              }
+            >
+              {item.name}
+            </NavLink>
+          ))}
+
+          {user && (
+            <>
+              <NavLink
+                to="/funding"
+                onClick={() => setIsOpen(false)}
+                className="block text-gray-700 hover:text-[#5C0000] "
+              >
+                Funding
+              </NavLink>
+
+              <NavLink
+                to="/dashboard"
+                onClick={() => setIsOpen(false)}
+                className="block px-4 py-2 text-gray-700 hover:bg-[#5C0000]  rounded"
+              >
+                Dashboard
+              </NavLink>
+              <button
+                onClick={() => {
+                  setIsOpen(false);
+                  handleLogout();
+                }}
+                className="w-full text-left px-4 py-2 text-gray-700 hover:bg-[#5C0000]  rounded"
+              >
+                Logout
+              </button>
+            </>
+          )}
+
+          {!user && (
+            <NavLink
+              to="/login"
+              onClick={() => setIsOpen(false)}
+              className="block mt-2 bg-[#5C0000]  text-white text-center px-4 py-2 rounded-lg hover:bg-[#5C0000] "
+            >
+              Login
+            </NavLink>
+          )}
+        </div>
+      )}
+    </nav>
   );
 };
 
