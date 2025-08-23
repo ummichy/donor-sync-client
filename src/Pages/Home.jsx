@@ -5,6 +5,7 @@ import Contact from '../Components/Contact';
 import UpcomingCamps from './UpcomingCamps';
 import DonorStories from './DonorStories';
 import MissionSection from './MissionSection';
+import EligibilitySection from './EligibilitySection';
 
 
 
@@ -16,6 +17,7 @@ const Home = () => {
             <UpcomingCamps></UpcomingCamps>
             <DonorStories></DonorStories>
             <MissionSection></MissionSection>
+            <EligibilitySection></EligibilitySection>
             <Contact></Contact>
         </div>
     );
