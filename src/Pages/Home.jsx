@@ -6,6 +6,7 @@ import UpcomingCamps from './UpcomingCamps';
 import DonorStories from './DonorStories';
 import MissionSection from './MissionSection';
 import EligibilitySection from './EligibilitySection';
+import BloodFacts from './BloodFacts';
 
 
 
@@ -18,6 +19,7 @@ const Home = () => {
             <DonorStories></DonorStories>
             <MissionSection></MissionSection>
             <EligibilitySection></EligibilitySection>
+            <BloodFacts></BloodFacts>
             <Contact></Contact>
         </div>
     );
