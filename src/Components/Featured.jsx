@@ -1,131 +1,98 @@
+// File: Featured.jsx
 import React from "react";
 import { motion } from "framer-motion";
 
 const features = [
   {
-    title: "Save Precious Lives",
+    title: "Give Life, Feel Alive",
     description:
-      "Each donation can save up to 3 lives. Join a compassionate community committed to making a real difference.",
-    iconBg: "bg-gradient-to-r from-red-600 to-red-400",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="w-12 h-12 text-white"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        strokeWidth={2}
-      >
-        <path strokeLinecap="round" strokeLinejoin="round" d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.72-7.72 1.06-1.06a5.5 5.5 0 000-7.84z" />
-      </svg>
-    ),
+      "Every blood donation creates hope and saves lives. Experience the joy of giving and making a tangible impact in your community.",
+    image:
+      "https://i.ibb.co.com/xQ5wGN0/pexels-franco30-12193105.jpg",
   },
   {
-    title: "Verified Donor Network",
+    title: "Trusted Donor Network",
     description:
-      "Connect with trusted, verified donors in your area, ensuring quick and reliable help when emergencies arise.",
-    iconBg: "bg-gradient-to-r from-pink-600 to-pink-400",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="w-12 h-12 text-white"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        strokeWidth={2}
-      >
-        <circle cx={12} cy={7} r={4} />
-        <path strokeLinecap="round" strokeLinejoin="round" d="M5.5 21a8.38 8.38 0 0113 0" />
-      </svg>
-    ),
+      "Join a verified network of donors and recipients. Your donation reaches the right people at the right time with safety and reliability.",
+    image:
+      "https://i.ibb.co.com/WN3BP1n4/pexels-ketut-subiyanto-4963437.jpg",
   },
   {
-    title: "Effortless Scheduling",
+    title: "Simple and Convenient",
     description:
-      "Easily book appointments and manage your donations with our simple, user-friendly platform.",
-    iconBg: "bg-gradient-to-r from-yellow-600 to-yellow-400",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="w-12 h-12 text-white"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        strokeWidth={2}
-      >
-        <rect x={3} y={4} width={18} height={18} rx={2} ry={2} />
-        <line x1={16} y1={2} x2={16} y2={6} />
-        <line x1={8} y1={2} x2={8} y2={6} />
-        <line x1={3} y1={10} x2={21} y2={10} />
-      </svg>
-    ),
+      "Schedule donations effortlessly with our easy-to-use platform. Spend less time managing, more time saving lives.",
+    image:
+      "https://i.ibb.co.com/7JGbVgTg/pexels-pixabay-39396.jpg",
   },
   {
-    title: "Locate Donors Fast",
+    title: "Empower Your Community",
     description:
-      "Find available donors in your vicinity quickly and securely during critical times.",
-    iconBg: "bg-gradient-to-r from-green-600 to-green-400",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="w-12 h-12 text-white"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        strokeWidth={2}
-      >
-        <circle cx={12} cy={12} r={10} />
-        <line x1={2} y1={12} x2={22} y2={12} />
-        <line x1={12} y1={2} x2={12} y2={22} />
-      </svg>
-    ),
+      "Be a hero in your neighborhood. Locate donors quickly, assist in emergencies, and inspire others to give the gift of life.",
+    image:
+      "https://i.ibb.co.com/1G3ZGX8h/pexels-karolina-grabowska-6629369.jpg",
   },
 ];
 
 const containerVariants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { staggerChildren: 0.15 },
-  },
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.2 } },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+  hidden: { opacity: 0, y: 50 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
 };
 
 const Featured = () => {
   return (
-    <section className="py-20 px-6 md:px-16 max-w-full mx-auto  bg-gradient-to-b from-gray-100
-     to-white">
-      <h2 className="text-center text-5xl font-extrabold text-[#5C0000] mb-16">
-        Why Join Our Blood Donation Community?
-      </h2>
+    <section className="relative py-28 bg-gradient-to-br from-red-50 via-white to-red-100 overflow-hidden">
+      <div className="max-w-6xl mx-auto px-6 relative z-10">
+        {/* Heading */}
+        <motion.h2
+          initial={{ opacity: 0, y: -20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="text-center text-5xl font-extrabold text-[#5C0000] mb-20"
+        >
+          Why Join Our Blood Donation Community?
+        </motion.h2>
 
-      <motion.div
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10"
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        {features.map(({ title, description, iconBg, icon }) => (
-          <motion.div
-            key={title}
-            className="bg-white rounded-2xl shadow-lg p-8 flex flex-col items-center text-center cursor-default hover:shadow-2xl hover:-translate-y-4 transition-transform duration-500"
-            variants={itemVariants}
-          >
-            <div
-              className={`${iconBg} rounded-full p-5 mb-6 flex items-center justify-center drop-shadow-lg`}
+        {/* Cards */}
+        <motion.div
+          className="grid gap-10 md:grid-cols-2"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+        >
+          {features.map((feature, index) => (
+            <motion.div
+              key={index}
+              variants={itemVariants}
+              whileHover={{ y: -8 }}
+              className="relative bg-white rounded-xl p-6 shadow-md hover:shadow-2xl transition-all duration-500 flex items-start gap-6 border border-red-100"
             >
-              {icon}
-            </div>
-            <h3 className="text-2xl font-semibold text-[#5C0000] mb-4">{title}</h3>
-            <p className="text-gray-700 text-base leading-relaxed">{description}</p>
-          </motion.div>
-        ))}
-      </motion.div>
+              {/* Image instead of icon */}
+              <div className="flex-shrink-0 w-28 h-28 rounded-lg overflow-hidden shadow-md">
+                <img
+                  src={feature.image}
+                  alt={feature.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+
+              {/* Text */}
+              <div>
+                <h3 className="text-2xl font-bold text-gray-700 mb-2">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-700 text-lg leading-relaxed">
+                  {feature.description}
+                </p>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
     </section>
   );
 };
