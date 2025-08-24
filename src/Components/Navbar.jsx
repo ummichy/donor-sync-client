@@ -26,6 +26,7 @@ const Navbar = () => {
     { name: "Home" },
     { name: "Donation Requests", path: "/Blood-req" },
     { name: "Blog", path: "/blogs" },
+    { name: "Contact us", path: "/contact" },
     
   ];
 
