@@ -51,7 +51,7 @@ const MyLayouts = () => {
       ) : (
         <div className='poppins flex flex-col min-h-screen'>
           <Navbar />
-          <div className="flex-1">
+          <div className="flex-1 bg-gradient-to-b from-white to-gray-100">
             <Outlet />
           </div>
           <Footer />

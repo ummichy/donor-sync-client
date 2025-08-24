@@ -29,6 +29,12 @@ import TotalUser from "../Components/TotalUser";
 import AllDonation from "../Pages/AllDonation";
 import MyLayouts from "../Layouts/MainLayouts";
 import MyDonationRequest from "../Pages/MyDonationRequset";
+import MissionSection from "../Pages/MissionSection";
+import Contact from "../Components/Contact";
+import FAQSection from "../components/FAQSection";
+import PrivacyPolicy from "../components/PrivacyPolicy";
+import TermsAndConditions from "../components/TermsAndConditions";
+
 
 
 const router = createBrowserRouter([
@@ -71,6 +77,27 @@ const router = createBrowserRouter([
                     </PrivateRoute>
                 ),
             },
+            {
+                path:"about",
+                element:<MissionSection></MissionSection>,
+            },
+            {
+                path:"contact",
+                element:<Contact></Contact>,
+            },
+            {
+                path:"terms",
+                element:<TermsAndConditions></TermsAndConditions> ,
+            },
+            {
+                path:"privacy",
+                element: <PrivacyPolicy></PrivacyPolicy> ,
+            },
+            {
+                path:"faq",
+                element:<FAQSection></FAQSection>,
+            },
+            
             {
                 path: "donation-details/:id",
                 Component: ViewDetails,
@@ -120,7 +147,7 @@ const router = createBrowserRouter([
 
             },
             {
-                path: "edit-donation/:id", // ✅ NEW
+                path: "edit-donation/:id", 
                 Component: EditDonor,
             },
             {

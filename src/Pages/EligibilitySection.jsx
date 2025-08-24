@@ -6,7 +6,7 @@ const EligibilitySection = () => {
     <section className="bg-gradient-to-b from-gray-100 to-white py-16">
       <div className="max-w-7xl mx-auto px-6">
         {/* Heading */}
-        <h2 className="text-4xl font-bold text-center text-[#5C0000] mb-12">
+        <h2 className="text-3xl md:text-5xl font-bold text-center text-[#5C0000]  mb-12">
           Blood Donation Eligibility
         </h2>
 

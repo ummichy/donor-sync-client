@@ -4,7 +4,7 @@ import { GiBlood } from "react-icons/gi";
 
 const Footer = () => {
   return (
-    <footer className="bg-[#f8f2ea] text-gray-700  border-t">
+    <footer className="bg-gradient-to-b from-gray-100 to-gray-200 text-gray-700  border-t">
       <div className="max-w-7xl mx-auto px-4 py-10 grid md:grid-cols-4 gap-8">
         {/* Brand */}
         <div>
@@ -41,7 +41,7 @@ const Footer = () => {
         <div>
           <h3 className="text-lg font-semibold mb-3">Contact Us</h3>
           <p className="text-sm">
-            Email: support@bloodbridge.com <br />
+            Email: donorsync@gmail.com <br />
             Phone: +880 1234 567890
           </p>
           <div className="flex gap-4 mt-3 text-[#5C0000] ">
@@ -53,7 +53,7 @@ const Footer = () => {
       </div>
 
       <div className="text-center text-xs py-4 border-t border-gray-200">
-        &copy; {new Date().getFullYear()} BloodConnect. All rights reserved.
+        &copy; {new Date().getFullYear()} DonorSync. All rights reserved.
       </div>
     </footer>
   );

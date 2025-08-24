@@ -1,6 +1,5 @@
 import React from "react";
 import { Calendar, MapPin, Users } from "lucide-react";
-import { motion } from "framer-motion";
 
 const UpcomingCamps = () => {
   const camps = [
@@ -31,50 +30,30 @@ const UpcomingCamps = () => {
   ];
 
   return (
-    <section className="py-20 bg-gradient-to-b from-gray-100
-     to-white relative">
+    <section className="py-20 bg-gradient-to-b from-gray-100 to-white relative">
       <div className="max-w-5xl mx-auto px-6">
         {/* Heading */}
-        <h2 className="text-3xl md:text-4xl font-bold text-center text-[#5C0000] mb-4">
-          Upcoming Donation Camps
+        <h2 className="text-3xl md:text-5xl font-bold text-center text-[#5C0000] mb-4">
+          <span className="md:text-7xl text-5xl">U</span>pcoming Donation Camps
         </h2>
         <p className="text-center text-gray-600 max-w-2xl mx-auto mb-12">
-          Mark your calendar and be part of life-saving events. Every drop makes
-          a difference.
+          Mark your calendar and be part of life-saving events. Every drop makes a difference.
         </p>
 
         {/* Timeline container */}
         <div className="relative border-l-4 border-[#5C0000] ml-6">
           {camps.map((camp, index) => (
-            <motion.div
-              key={camp.id}
-              initial={{ opacity: 0, x: index % 2 === 0 ? -100 : 100, scale: 0.8 }}
-              whileInView={{ opacity: 1, x: 0, scale: 1 }}
-              whileHover={{ scale: 1.02 }}
-              transition={{ duration: 0.8, type: "spring", stiffness: 100 }}
-              viewport={{ once: true }}
-              className="mb-12 ml-6"
-            >
+            <div key={camp.id} className="mb-12 ml-6">
               {/* Timeline dot */}
-              <motion.span
-                initial={{ scale: 0 }}
-                animate={{ scale: 1, rotate: 360 }}
-                transition={{ duration: 0.5, delay: index * 0.2 }}
-                className="absolute -left-[22px] flex items-center justify-center w-10 h-10 bg-[#5C0000] text-white rounded-full shadow-lg font-bold"
-              >
+              <span className="absolute -left-[22px] flex items-center justify-center w-10 h-10 bg-[#5C0000] text-white rounded-full shadow-lg font-bold">
                 {index + 1}
-              </motion.span>
+              </span>
 
-              {/* Card */}
-              <motion.div
-                whileHover={{ rotate: [0, 1, -1, 0] }}
-                className="bg-white shadow-xl rounded-xl border border-gray-100 transition flex flex-col md:flex-row overflow-hidden"
-              >
+              {/* Card with subtle hover animation */}
+              <div className="bg-white shadow-xl rounded-xl border border-gray-100 transition-transform transform hover:scale-105 hover:shadow-2xl flex flex-col md:flex-row overflow-hidden duration-300 ease-in-out">
                 {/* Left Side - Text */}
                 <div className="flex-1 p-6">
-                  <h3 className="text-xl font-semibold text-gray-800 mb-3">
-                    {camp.title}
-                  </h3>
+                  <h3 className="text-xl font-semibold text-gray-800 mb-3">{camp.title}</h3>
                   <div className="space-y-2 text-gray-600">
                     <p className="flex items-center gap-2">
                       <Calendar size={18} className="text-black" />
@@ -91,21 +70,16 @@ const UpcomingCamps = () => {
                   </div>
                 </div>
 
-                {/* Right Side - Image */}
-                <motion.div
-                  initial={{ scale: 0.9 }}
-                  whileInView={{ scale: 1 }}
-                  transition={{ duration: 0.8 }}
-                  className="md:w-1/3"
-                >
+                {/* Right Side - Image with subtle hover zoom */}
+                <div className="md:w-1/3 overflow-hidden">
                   <img
                     src={camp.image}
                     alt={camp.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover transition-transform duration-500 ease-in-out hover:scale-105"
                   />
-                </motion.div>
-              </motion.div>
-            </motion.div>
+                </div>
+              </div>
+            </div>
           ))}
         </div>
       </div>

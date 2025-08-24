@@ -101,7 +101,7 @@ const DashboardLayout = () => {
       )}
 
       {/* Main content */}
-      <div className="flex-1 flex flex-col overflow-hidden bg-[#f8f2ea]">
+      <div className="flex-1 flex flex-col overflow-hidden bg-gray-50">
         <header className="md:hidden flex items-center justify-between bg-white shadow px-5 py-3 border-b border-gray-200">
           <button
             className="text-[#5C0000] focus:outline-none"

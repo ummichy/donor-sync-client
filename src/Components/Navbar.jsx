@@ -98,7 +98,7 @@ const Navbar = () => {
                   <div className="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg py-2 z-50">
                     <NavLink
                       to="/dashboard"
-                      className="block px-4 py-2 text-gray-700 hover:bg-[#f8f2ea]"
+                      className="block px-4 py-2 text-gray-700 hover:bg-gray-200"
                       onClick={() => setDropdownOpen(false)}
                     >
                       Dashboard
@@ -108,7 +108,7 @@ const Navbar = () => {
                         setDropdownOpen(false);
                         handleLogout();
                       }}
-                      className="w-full text-left px-4 py-2 text-gray-700 hover:bg-[#f8f2ea] "
+                      className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-200 "
                     >
                       Logout
                     </button>
